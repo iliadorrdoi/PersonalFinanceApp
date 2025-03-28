@@ -1,12 +1,12 @@
-from models.category import Category
+from models.budget import Budget
 
 def main():
-    category = Category(1, 1, "Продукты", "expense")
-    category.create_category()
-    print(category.get_info())
-    category.update_category(new_name="Продукты и напитки")
-    print(category.get_info())
-    category.delete_category()
+    budget = Budget(1, 1, 1, 10000.0, "monthly")
+    budget.create_budget()
+    budget.check_budget_status(total_spent=3200.0)
+    budget.update_budget(new_amount=12000.0)
+    budget.check_budget_status(total_spent=5000.0)
+    budget.delete_budget()
 
 if __name__ == "__main__":
     main()

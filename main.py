@@ -1,16 +1,13 @@
-from controllers.main_controller import MainController
+from models.account import Account
 
 def main():
-    controller = MainController()
-
-    # Регистрация нового пользователя
-    user = controller.register_user(1, "eldiyar", "password123", "eldiyar@example.com")
-
-    # Проверка логина с правильными данными
-    controller.login_user(user, "eldiyar", "password123")
-
-    # Проверка логина с неправильными данными
-    controller.login_user(user, "eldiyar", "wrongpassword")
+    account = Account(1, 1, "Основной счёт", 1000.0, "KGS")
+    account.create_account()
+    account.get_account_balance()
+    account.update_account(new_name="Новый счёт", new_currency="USD")
+    account.get_account_balance()
+    account.delete_account()
 
 if __name__ == "__main__":
     main()
+

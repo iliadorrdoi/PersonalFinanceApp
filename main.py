@@ -1,25 +1,24 @@
-from dao.user_dao import UserDAO
-from models.user import User
-from datetime import datetime
+from dao.account_dao import AccountDAO
+from models.account import Account
 
 def main():
-    user_dao = UserDAO()
+    dao = AccountDAO()
+    acc = Account(1, 1, "Кошелёк", 2500.0, "KGS")
 
-    user = User(1, "eldiyar", "pass123", "eldiyar@example.com", datetime.now())
-    user_dao.create_user(user)
+    dao.create_account(acc)
 
-    fetched_user = user_dao.get_user_by_id(1)
-    if fetched_user:
-        print("Найден пользователь:", fetched_user.username)
+    found = dao.get_account_by_id(1)
+    if found:
+        print("Найден счёт:", found.account_name, found.balance)
 
-    user.username = "eldiyar_updated"
-    user_dao.update_user(user)
+    acc.balance = 3000.0
+    dao.update_account(acc)
 
-    for u in user_dao.get_all_users():
-        print(u.username, u.email)
+    all_accounts = dao.get_all_accounts()
+    for a in all_accounts:
+        print(a.account_name, a.balance, a.currency)
 
-    user_dao.delete_user(1)
+    dao.delete_account(1)
 
 if __name__ == "__main__":
     main()
-

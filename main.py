@@ -1,21 +1,11 @@
-from models.financial_goal import FinancialGoal
-from datetime import datetime
+from models.currency import Currency
 
 def main():
-    goal = FinancialGoal(
-        goal_id=1,
-        user_id=1,
-        goal_name="Купить ноутбук",
-        target_amount=50000.0,
-        current_amount=15000.0,
-        deadline=datetime(2025, 6, 1)
-    )
+    usd = Currency(1, "USD", 89.5)  # курс USD относительно KGS
+    eur = Currency(2, "EUR", 96.0)
 
-    goal.create_goal()
-    goal.get_goal_progress()
-    goal.update_goal_progress(5000.0)
-    goal.get_goal_progress()
-    goal.delete_goal()
+    usd.update_exchange_rate(90.0)
+    usd.convert_amount(100, eur.exchange_rate)
 
 if __name__ == "__main__":
     main()

@@ -1,24 +1,35 @@
-from dao.account_dao import AccountDAO
-from models.account import Account
+from dao.transaction_dao import TransactionDAO
+from models.transaction import Transaction
+from datetime import datetime
 
 def main():
-    dao = AccountDAO()
-    acc = Account(1, 1, "Кошелёк", 2500.0, "KGS")
+    dao = TransactionDAO()
+    tx = Transaction(
+        transaction_id=1,
+        user_id=1,
+        account_id=1,
+        category_id=1,
+        amount=200.0,
+        tx_type="expense",
+        currency="KGS",
+        date=datetime.now(),
+        description="Кафе"
+    )
 
-    dao.create_account(acc)
+    dao.create_transaction(tx)
 
-    found = dao.get_account_by_id(1)
+    found = dao.get_transaction_by_id(1)
     if found:
-        print("Найден счёт:", found.account_name, found.balance)
+        print("Найдена транзакция:", found.description, found.amount)
 
-    acc.balance = 3000.0
-    dao.update_account(acc)
+    tx.amount = 250.0
+    tx.description = "Кафе и напитки"
+    dao.update_transaction(tx)
 
-    all_accounts = dao.get_all_accounts()
-    for a in all_accounts:
-        print(a.account_name, a.balance, a.currency)
+    for t in dao.get_all_transactions():
+        print(t.tx_type, t.amount, t.currency, t.description)
 
-    dao.delete_account(1)
+    dao.delete_transaction(1)
 
 if __name__ == "__main__":
     main()

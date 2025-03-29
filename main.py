@@ -1,12 +1,13 @@
-from controllers.account_controller import AccountController
+from controllers.category_controller import CategoryController
 
 def main():
-    controller = AccountController()
-    controller.create_account(1, 1, "Бюджет Эльдияра", 7624, "KGS")
-    controller.get_account(1)
-    controller.update_account(1, new_name="Домашний счёт", new_balance=3000.0)
-    controller.list_accounts()
-    controller.delete_account(1)
+    controller = CategoryController()
+
+    controller.create_category(1, 1, "Продукты", "expense")
+    controller.get_category(1)
+    controller.update_category(1, new_name="Еда и напитки")
+    controller.list_categories()
+    controller.delete_category(1)
 
 if __name__ == "__main__":
     main()

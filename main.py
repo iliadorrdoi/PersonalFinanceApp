@@ -1,24 +1,25 @@
-from dao.budget_dao import BudgetDAO
-from models.budget import Budget
+from dao.financial_goal_dao import FinancialGoalDAO
+from models.financial_goal import FinancialGoal
+from datetime import datetime
 
 def main():
-    dao = BudgetDAO()
-    budget = Budget(1, 1, 1, 10000.0, "monthly")
+    dao = FinancialGoalDAO()
+    goal = FinancialGoal(1, 1, "Ноутбук", 50000.0, 15000.0, datetime(2025, 6, 1))
 
-    dao.create_budget(budget)
+    dao.create_goal(goal)
 
-    found = dao.get_budget_by_id(1)
+    found = dao.get_goal_by_id(1)
     if found:
-        print("Найден бюджет:", found.amount, found.period)
+        print("Найдена цель:", found.goal_name)
 
-    budget.amount = 12000.0
-    budget.period = "quarterly"
-    dao.update_budget(budget)
+    goal.current_amount = 25000.0
+    goal.target_amount = 55000.0
+    dao.update_goal(goal)
 
-    for b in dao.get_all_budgets():
-        print(b.amount, b.period)
+    for g in dao.get_all_goals():
+        print(g.goal_name, g.current_amount, g.deadline)
 
-    dao.delete_budget(1)
+    dao.delete_goal(1)
 
 if __name__ == "__main__":
     main()

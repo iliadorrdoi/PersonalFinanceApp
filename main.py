@@ -1,23 +1,24 @@
-from dao.category_dao import CategoryDAO
-from models.category import Category
+from dao.budget_dao import BudgetDAO
+from models.budget import Budget
 
 def main():
-    dao = CategoryDAO()
-    cat = Category(1, 1, "Продукты", "expense")
+    dao = BudgetDAO()
+    budget = Budget(1, 1, 1, 10000.0, "monthly")
 
-    dao.create_category(cat)
+    dao.create_budget(budget)
 
-    found = dao.get_category_by_id(1)
+    found = dao.get_budget_by_id(1)
     if found:
-        print("Найдена категория:", found.name)
+        print("Найден бюджет:", found.amount, found.period)
 
-    cat.name = "Продукты и напитки"
-    dao.update_category(cat)
+    budget.amount = 12000.0
+    budget.period = "quarterly"
+    dao.update_budget(budget)
 
-    for c in dao.get_all_categories():
-        print(c.name, c.tx_type)
+    for b in dao.get_all_budgets():
+        print(b.amount, b.period)
 
-    dao.delete_category(1)
+    dao.delete_budget(1)
 
 if __name__ == "__main__":
     main()

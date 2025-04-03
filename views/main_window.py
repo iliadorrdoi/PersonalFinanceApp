@@ -24,6 +24,7 @@ class MainWindow:
         tk.Button(self.window, text="➕ Добавить транзакцию", width=30, command=self.add_transaction).pack(pady=5)
         tk.Button(self.window, text="📋 Показать транзакции", width=30, command=self.show_transactions).pack(pady=5)
         tk.Button(self.window, text="🎯 Добавить цель", width=30, command=self.add_goal).pack(pady=5)
+        tk.Button(self.window, text="📋 Показать цели", width=30, command=self.show_goals).pack(pady=5)
 
         tk.Button(self.window, text="🚪 Выйти", width=30, command=self.window.quit).pack(pady=20)
 
@@ -150,3 +151,21 @@ class MainWindow:
                 messagebox.showerror("Ошибка", f"Неверный ввод: {e}")
 
         tk.Button(win, text="Добавить", command=submit).grid(row=len(labels), column=0, columnspan=2, pady=10)
+
+    def show_goals(self):
+        goals = self.goal_ctrl.dao.get_all_goals()
+        if not goals:
+            messagebox.showinfo("Цели", "Нет сохранённых целей.")
+            return
+
+        text = ""
+        for g in goals:
+            text += f"[{g.goal_id}] {g.goal_name}: {g.current_amount} / {g.target_amount} до {g.deadline.date()}\n"
+
+        win = tk.Toplevel()
+        win.title("Финансовые цели")
+        text_box = tk.Text(win, width=60, height=15)
+        text_box.pack(padx=10, pady=10)
+        text_box.insert("1.0", text)
+        text_box.config(state="disabled")
+

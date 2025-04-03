@@ -3,16 +3,19 @@ from tkinter import messagebox
 from controllers.account_controller import AccountController
 from controllers.transaction_controller import TransactionController
 from controllers.category_controller import CategoryController
+from controllers.financial_goal_controller import FinancialGoalController as GoalController
+from datetime import datetime
 
 class MainWindow:
     def __init__(self):
         self.window = tk.Tk()
         self.window.title("Personal Finance Manager")
-        self.window.geometry("400x400")
+        self.window.geometry("400x500")
 
         self.account_ctrl = AccountController()
         self.transaction_ctrl = TransactionController()
         self.category_ctrl = CategoryController()
+        self.goal_ctrl = GoalController()
 
         tk.Label(self.window, text="💰 Personal Finance Manager", font=("Arial", 16)).pack(pady=20)
 
@@ -20,6 +23,8 @@ class MainWindow:
         tk.Button(self.window, text="📋 Показать счета", width=30, command=self.show_accounts).pack(pady=5)
         tk.Button(self.window, text="➕ Добавить транзакцию", width=30, command=self.add_transaction).pack(pady=5)
         tk.Button(self.window, text="📋 Показать транзакции", width=30, command=self.show_transactions).pack(pady=5)
+        tk.Button(self.window, text="🎯 Добавить цель", width=30, command=self.add_goal).pack(pady=5)
+
         tk.Button(self.window, text="🚪 Выйти", width=30, command=self.window.quit).pack(pady=20)
 
         self.window.mainloop()
@@ -110,10 +115,38 @@ class MainWindow:
         for tx in transactions:
             text += f"[{tx.transaction_id}] {tx.tx_type.upper()} — {tx.amount} {tx.currency} | Счёт: {tx.account_id} | Категория: {tx.category_id}\n"
 
-        # Показываем окно со скроллом
         win = tk.Toplevel()
         win.title("Транзакции")
         text_box = tk.Text(win, width=60, height=20)
         text_box.pack(padx=10, pady=10)
         text_box.insert("1.0", text)
         text_box.config(state="disabled")
+
+    def add_goal(self):
+        win = tk.Toplevel()
+        win.title("Добавить финансовую цель")
+
+        labels = ["ID", "User ID", "Название цели", "Целевая сумма", "Дедлайн (ГГГГ-ММ-ДД)", "Текущий прогресс"]
+        entries = []
+        for i, label in enumerate(labels):
+            tk.Label(win, text=label).grid(row=i, column=0)
+            entry = tk.Entry(win)
+            entry.grid(row=i, column=1)
+            entries.append(entry)
+
+        def submit():
+            try:
+                goal_id = int(entries[0].get())
+                user_id = int(entries[1].get())
+                name = entries[2].get()
+                target_amount = float(entries[3].get())
+                deadline = entries[4].get()  # оставляем как строку
+                current_amount = float(entries[5].get())
+
+                self.goal_ctrl.create_goal(goal_id, user_id, name, target_amount, current_amount, deadline)
+                messagebox.showinfo("Успех", "Цель добавлена!")
+                win.destroy()
+            except ValueError as e:
+                messagebox.showerror("Ошибка", f"Неверный ввод: {e}")
+
+        tk.Button(win, text="Добавить", command=submit).grid(row=len(labels), column=0, columnspan=2, pady=10)

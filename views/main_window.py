@@ -25,6 +25,7 @@ class MainWindow:
         tk.Button(self.window, text="📋 Показать транзакции", width=30, command=self.show_transactions).pack(pady=5)
         tk.Button(self.window, text="🎯 Добавить цель", width=30, command=self.add_goal).pack(pady=5)
         tk.Button(self.window, text="📋 Показать цели", width=30, command=self.show_goals).pack(pady=5)
+        tk.Button(self.window, text="📈 Обновить цель", width=30, command=self.update_goal).pack(pady=5)
 
         tk.Button(self.window, text="🚪 Выйти", width=30, command=self.window.quit).pack(pady=20)
 
@@ -168,4 +169,34 @@ class MainWindow:
         text_box.pack(padx=10, pady=10)
         text_box.insert("1.0", text)
         text_box.config(state="disabled")
+
+    def update_goal(self):
+        win = tk.Toplevel()
+        win.title("Обновить цель")
+
+        tk.Label(win, text="ID цели").grid(row=0, column=0)
+        tk.Label(win, text="Добавить к сумме (опц.)").grid(row=1, column=0)
+        tk.Label(win, text="Новая целевая сумма (опц.)").grid(row=2, column=0)
+
+        id_entry = tk.Entry(win)
+        add_entry = tk.Entry(win)
+        target_entry = tk.Entry(win)
+
+        id_entry.grid(row=0, column=1)
+        add_entry.grid(row=1, column=1)
+        target_entry.grid(row=2, column=1)
+
+        def submit():
+            try:
+                goal_id = int(id_entry.get())
+                added = float(add_entry.get()) if add_entry.get() else 0
+                new_target = float(target_entry.get()) if target_entry.get() else None
+
+                self.goal_ctrl.update_goal(goal_id, added_amount=added, new_target=new_target)
+                messagebox.showinfo("Успех", "Цель обновлена!")
+                win.destroy()
+            except ValueError:
+                messagebox.showerror("Ошибка", "Проверь ввод!")
+
+        tk.Button(win, text="Обновить", command=submit).grid(row=3, column=0, columnspan=2, pady=10)
 
